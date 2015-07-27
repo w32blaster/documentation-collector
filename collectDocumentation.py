@@ -8,12 +8,13 @@ from subprocess import call
 #GitPython:
 from git import Repo
 from git import InvalidGitRepositoryError
-
+from subprocess import call
 
 
 # path where the jBake site is located
 bakePath = '/home/ilja/workspace/docs'
 bakeContentPath = bakePath + '/content/'
+bakeReadyWebsite = bakePath + '/output/'
 
 # directory where is cloned repositories are located
 clonedReposPath = '/home/ilja/testCloned/'
@@ -21,7 +22,16 @@ clonedReposPath = '/home/ilja/testCloned/'
 # directory where bare repositories are located
 bareReposPath = '/home/ilja/testBareRepos'
 
+# directory, where HTML version of your documentation is hosted
+documentationFinalPath = '/home/ilja/Public/documentation'
+
 readmeFileName = 'PI_README.md'
+
+# if JBake is in your env, then provide only 'jbake', otherwise full path name
+pathToJBakeExec='jbake'
+
+
+
 
 def main(argv):
       '''
@@ -39,7 +49,7 @@ def main(argv):
             _updateRepositories()
 
             # remove all old files
-            shutil.rmtree(bakeContentPath)
+            shutil.rmtree(bakeContentPath, True)
             os.mkdir(bakeContentPath)
 
             # recursively collect READMEs 
@@ -48,7 +58,12 @@ def main(argv):
                         fullPath = os.path.join(root, filename)
                         _copyFile(fullPath)
 
+            # ask JBake to re-build the website
+            call([pathToJBakeExec, bakePath, bakeReadyWebsite, "--bake"])
 
+            # copy generated files to the destination folder
+            shutil.rmtree(documentationFinalPath, True)
+            shutil.copytree(bakeReadyWebsite, documentationFinalPath)
 
 def _cloneRepositories():
       '''
@@ -70,6 +85,7 @@ def _cloneRepositories():
 
             except InvalidGitRepositoryError:
                   print "the %s is not repo" % bareRepoPath
+
 
 def _updateRepositories():
       '''
@@ -114,7 +130,7 @@ def _extractCLArguments(argv):
       try:
             opts, args = getopt.getopt(argv,"c",[])
       except getopt.GetoptError:
-            print 'process.py -s <smallFileToBeModified> -p <producersFile>'
+            print 'collectDocumentation.py -c'
             sys.exit(2)
 
       for opt, arg in opts:
