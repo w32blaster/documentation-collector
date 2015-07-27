@@ -2,6 +2,7 @@
 import os.path
 import sys, getopt
 import fnmatch
+import shutil
 from shutil import copyfile
 from subprocess import call
 #GitPython:
@@ -15,11 +16,12 @@ bakePath = '/home/ilja/workspace/docs'
 bakeContentPath = bakePath + '/content/'
 
 # directory where is cloned repositories are located
-clonedReposPath = '/home/ilja/testCloned'
+clonedReposPath = '/home/ilja/testCloned/'
 
 # directory where bare repositories are located
-bareReposPath = '/home/ilja/workspace'
+bareReposPath = '/home/ilja/testBareRepos'
 
+readmeFileName = 'PI_README.md'
 
 def main(argv):
       '''
@@ -36,11 +38,17 @@ def main(argv):
             # pull the latest changes to each repository
             _updateRepositories()
 
+            # remove all old files
+            shutil.rmtree(bakeContentPath)
+            os.mkdir(bakeContentPath)
+
             # recursively collect READMEs 
             for root, dirnames, filenames in os.walk(clonedReposPath):
-                  for filename in fnmatch.filter(filenames, 'PI_README.md'):
+                  for filename in fnmatch.filter(filenames, readmeFileName):
                         fullPath = os.path.join(root, filename)
                         _copyFile(fullPath)
+
+
 
 def _cloneRepositories():
       '''
@@ -48,6 +56,7 @@ def _cloneRepositories():
       This command is designed to be executed only once, then it will be only updated.
       '''
 
+      suffixLength = -len(".git")
       # get the list of all the top-level directories
       dirnames=[d for d in os.listdir(bareReposPath) if os.path.isdir(os.path.join(bareReposPath, d)) ]
 
@@ -56,7 +65,9 @@ def _cloneRepositories():
             try:
                   repo = Repo(bareRepoPath)
                   if repo.bare:
-                        repo.clone(clonedReposPath)
+                        repo.clone(os.path.join(clonedReposPath, dirname[:suffixLength]))
+                        print "the %s repository was cloned" % bareRepoPath
+
             except InvalidGitRepositoryError:
                   print "the %s is not repo" % bareRepoPath
 
@@ -64,7 +75,13 @@ def _updateRepositories():
       '''
       Get the latest changes for each repository
       '''
-      println "not implemented"
+
+      dirnames=[d for d in os.listdir(clonedReposPath) if os.path.isdir(os.path.join(clonedReposPath, d)) ]
+      for dirname in dirnames:
+            repo = Repo(os.path.join(clonedReposPath, dirname))
+            o = repo.remotes.origin
+            o.pull()
+            print "repository %s is updated " % dirname
 
 
 def _copyFile(fullPath):
