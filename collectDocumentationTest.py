@@ -1,5 +1,7 @@
 import unittest
 from collectDocumentation import _isCloneExist
+from collectDocumentation import _getNewPathForFile
+from collectDocumentation import readmeFileName
 
 class ProcessTests(unittest.TestCase):
 
@@ -17,6 +19,24 @@ class ProcessTests(unittest.TestCase):
             self.assertEqual(True, _isCloneExist(clonedRepos, 'three.git'))
             self.assertEqual(False, _isCloneExist(clonedRepos, 'four'))
             self.assertEqual(False, _isCloneExist(clonedRepos, 'four.git'))
+
+
+      def test_new_file_path_created_with_nested_directories(self):
+            
+            # given
+            content = "/var/www/"
+            clones = "/home/git/"
+
+            # when
+            self.assertEqual("/var/www/One.md", _getNewPathForFile(content, clones, "/home/git/myRepo/" + readmeFileName, "One"))
+            self.assertEqual("/var/www/Two.md", _getNewPathForFile(content, clones, "/home/git/myRepo/" + readmeFileName, "Two"))
+
+            # and
+            self.assertEqual("/var/www/nestedFilder/Two.md", _getNewPathForFile(content, clones, "/home/git/myRepo/nestedFilder/" + readmeFileName, "Two"))
+            self.assertEqual("/var/www/nestedFilder/folder2/Two.md", _getNewPathForFile(content, clones, "/home/git/myRepo/nestedFilder/folder2/" + readmeFileName, "Two"))
+
+
+
 
 def main():
     unittest.main()

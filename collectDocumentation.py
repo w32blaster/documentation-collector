@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import os.path
+import os
 import sys, getopt
 import fnmatch
 import shutil
@@ -20,7 +20,7 @@ bakeReadyWebsite = bakePath + '/output/'
 clonedReposPath = '/home/ilja/testCloned/'
 
 # directory where bare repositories are located
-bareReposPath = '/home/ilja/workspace/'
+bareReposPath = '/home/ilja/testBareRepos/'
 
 # directory, where HTML version of your documentation is hosted
 documentationFinalPath = '/home/ilja/Public/documentation'
@@ -125,6 +125,7 @@ def _copyFile(fullPath):
          title=Some Human Readable title
 
       '''
+
       f=open(fullPath, 'r')
       
       # read the first line, containing "title=" line
@@ -135,9 +136,28 @@ def _copyFile(fullPath):
       newFileName=line[prefixLength:].replace(" ", "_")
       
       # copy file
-      newFullPath = bakeContentPath + newFileName + ".md"
+      newFullPath = _getNewPathForFile(bakeContentPath, clonedReposPath, fullPath, newFileName)
+      
+      # if this file in the subdirectory, than create it first
+      subFolder = os.path.split(newFullPath)[0]
+      if not os.path.isdir(subFolder):
+            os.makedirs(subFolder)
+
       copyfile(fullPath, newFullPath)
+
       print "[COPY] the file '%s' is copied to '%s' " % (fullPath, newFullPath)
+
+
+def _getNewPathForFile(bakeContentPath, cloneDirName, fullPath, newFileName):
+      
+      # get path relative Git storage
+      rel = os.path.relpath(fullPath, cloneDirName)
+
+      # get path relative the current repo root
+      relFolder = rel.split(os.sep)
+      relRepoRootPath = os.path.split(os.path.relpath(rel, relFolder[0]))
+
+      return os.path.join(bakeContentPath, relRepoRootPath[0], newFileName + ".md")
 
 
 
