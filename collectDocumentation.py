@@ -20,7 +20,7 @@ bakeReadyWebsite = bakePath + '/output/'
 clonedReposPath = '/home/ilja/testCloned/'
 
 # directory where bare repositories are located
-bareReposPath = '/home/ilja/testBareRepos'
+bareReposPath = '/home/ilja/workspace'
 
 # directory, where HTML version of your documentation is hosted
 documentationFinalPath = '/home/ilja/Public/documentation'
@@ -81,7 +81,10 @@ def _cloneRepositories():
                   repo = Repo(bareRepoPath)
                   if repo.bare:
                         repo.clone(os.path.join(clonedReposPath, dirname[:suffixLength]))
-                        print "the %s repository was cloned" % bareRepoPath
+                  else:
+                        repo.clone(os.path.join(clonedReposPath, dirname))
+                  
+                  print "the %s repository was cloned" % bareRepoPath
 
             except InvalidGitRepositoryError:
                   print "the %s is not repo" % bareRepoPath
