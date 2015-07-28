@@ -20,7 +20,7 @@ bakeReadyWebsite = bakePath + '/output/'
 clonedReposPath = '/home/ilja/testCloned/'
 
 # directory where bare repositories are located
-bareReposPath = '/home/ilja/workspace'
+bareReposPath = '/home/ilja/workspace/'
 
 # directory, where HTML version of your documentation is hosted
 documentationFinalPath = '/home/ilja/Public/documentation'
@@ -30,8 +30,8 @@ readmeFileName = 'PI_README.md'
 # if JBake is in your env, then provide only 'jbake', otherwise full path name
 pathToJBakeExec='jbake'
 
-
-
+suffixLength = -len(".git")
+prefixLength = len("title=")
 
 def main(argv):
       '''
@@ -39,75 +39,91 @@ def main(argv):
       Each file should be renamed and copied to jBake folder.
       '''
 
-      isCreate = _extractCLArguments(argv)
+      # pull/clone all available repositories
+      _updateRepositories()
 
-      if isCreate:
-            _cloneRepositories()
+      # remove all old files
+      shutil.rmtree(bakeContentPath, True)
+      os.mkdir(bakeContentPath)
 
-      else:
-            # pull the latest changes to each repository
-            _updateRepositories()
+      # recursively collect READMEs 
+      for root, dirnames, filenames in os.walk(clonedReposPath):
+            for filename in fnmatch.filter(filenames, readmeFileName):
+                  fullPath = os.path.join(root, filename)
+                  _copyFile(fullPath)
 
-            # remove all old files
-            shutil.rmtree(bakeContentPath, True)
-            os.mkdir(bakeContentPath)
+      # ask JBake to re-build the website
+      call([pathToJBakeExec, bakePath, bakeReadyWebsite, "--bake"])
 
-            # recursively collect READMEs 
-            for root, dirnames, filenames in os.walk(clonedReposPath):
-                  for filename in fnmatch.filter(filenames, readmeFileName):
-                        fullPath = os.path.join(root, filename)
-                        _copyFile(fullPath)
-
-            # ask JBake to re-build the website
-            call([pathToJBakeExec, bakePath, bakeReadyWebsite, "--bake"])
-
-            # copy generated files to the destination folder
-            shutil.rmtree(documentationFinalPath, True)
-            shutil.copytree(bakeReadyWebsite, documentationFinalPath)
-
-def _cloneRepositories():
-      '''
-      In order to get access to the source code we need to clone bare repos first.
-      This command is designed to be executed only once, then it will be only updated.
-      '''
-
-      suffixLength = -len(".git")
-      # get the list of all the top-level directories
-      dirnames=[d for d in os.listdir(bareReposPath) if os.path.isdir(os.path.join(bareReposPath, d)) ]
-
-      for dirname in dirnames:
-            bareRepoPath = os.path.join(bareReposPath, dirname)
-            try:
-                  repo = Repo(bareRepoPath)
-                  if repo.bare:
-                        repo.clone(os.path.join(clonedReposPath, dirname[:suffixLength]))
-                  else:
-                        repo.clone(os.path.join(clonedReposPath, dirname))
-                  
-                  print "the %s repository was cloned" % bareRepoPath
-
-            except InvalidGitRepositoryError:
-                  print "the %s is not repo" % bareRepoPath
+      # copy generated files to the destination folder
+      shutil.rmtree(documentationFinalPath, True)
+      shutil.copytree(bakeReadyWebsite, documentationFinalPath)
 
 
 def _updateRepositories():
       '''
-      Get the latest changes for each repository
+      Updates all the repositories. In case if there is some new bare repository,
+      it will be cloned.
       '''
 
-      dirnames=[d for d in os.listdir(clonedReposPath) if os.path.isdir(os.path.join(clonedReposPath, d)) ]
-      for dirname in dirnames:
-            repo = Repo(os.path.join(clonedReposPath, dirname))
-            o = repo.remotes.origin
-            o.pull()
-            print "repository %s is updated " % dirname
+      bareDirnames=[d for d in os.listdir(bareReposPath) if os.path.isdir(os.path.join(bareReposPath, d)) ]
+      clonesDirnames=[d for d in os.listdir(clonedReposPath) if os.path.isdir(os.path.join(clonedReposPath, d)) ]
+
+      for dirname in bareDirnames:
+            if _isCloneExist(clonesDirnames, dirname):
+                  # this repo is has been cloned, update it
+                  _update(dirname)
+            else:
+                  # new repo has been appeared, clone it
+                  _cloneRepository(dirname)
+
+
+def _update(dirname):
+      '''
+      Executes 'git pull origin master' for the specified directory
+      '''
+      cloneDirName = dirname[:suffixLength] if (".git" in dirname) else dirname
+      repo = Repo(os.path.join(clonedReposPath, cloneDirName))
+      o = repo.remotes.origin
+      o.pull()
+      print "[UPDATE] '%s' is updated " % cloneDirName
+
+
+def _cloneRepository(dirname):
+      '''
+      Clones given repository.
+      '''
+
+      repoPath = os.path.join(bareReposPath, dirname)
+      try:
+            repo = Repo(repoPath)
+            if repo.bare:
+                  repo.clone(os.path.join(clonedReposPath, dirname[:suffixLength]))
+            else:
+                  repo.clone(os.path.join(clonedReposPath, dirname))
+            
+            print "[CLONE] '%s' was cloned" % repoPath
+
+      except InvalidGitRepositoryError:
+            print "[SKIP] the '%s' is not repo" % repoPath
+
+
+def _isCloneExist(clonedRepos, currentBareRepo):
+      '''
+      Checks that the given bare repository has clone
+      '''
+      return (currentBareRepo in clonedRepos) or (currentBareRepo[:suffixLength] in clonedRepos)
 
 
 def _copyFile(fullPath):
       '''
       Read the first line of a file and extract the title, that
       will be the name of a new file. Then it copies the file
-      to a new destination
+      to a new destination.
+
+      Expected, that the very first line will be:
+         title=Some Human Readable title
+
       '''
       f=open(fullPath, 'r')
       
@@ -116,31 +132,12 @@ def _copyFile(fullPath):
       f.close()
 
       # replace spaces and prefix "title="
-      newFileName=line[6:].replace(" ", "_")
+      newFileName=line[prefixLength:].replace(" ", "_")
       
       # copy file
       newFullPath = bakeContentPath + newFileName + ".md"
       copyfile(fullPath, newFullPath)
-      print "the file %s is copied to %s " % (fullPath, newFullPath)
-
-
-def _extractCLArguments(argv):
-      '''
-      Extracts command line arguments
-      '''
-
-      isCreate = False
-      try:
-            opts, args = getopt.getopt(argv,"c",[])
-      except getopt.GetoptError:
-            print 'collectDocumentation.py -c'
-            sys.exit(2)
-
-      for opt, arg in opts:
-            if opt == '-c':
-                  isCreate = True
-
-      return isCreate    
+      print "[COPY] the file '%s' is copied to '%s' " % (fullPath, newFullPath)
 
 
 
