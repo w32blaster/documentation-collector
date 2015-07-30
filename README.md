@@ -43,8 +43,8 @@ The script could be executed by CRON or Git hook.
  ```
  
  ...it will generate ready HTML website for you in the **output** directory.
- 4. now you are ready to bake your first documentation. Open script **collectDocumentation.py** and modify the following settings in the top of the file:
-  * **bakePath** - the path to the JBake website, that you created in Step 3.
+ 4. now you are ready to "bake" your first documentation. Open script **collectDocumentation.py** and modify the following settings in the top of the file:
+  * **bakePath** - the path to the JBake directory, that you created in Step 3.
   * **clonedReposPath** - directory where script will clone all your repos. On each other invocation it will update instead cloning.
   * **bareReposPath** - path where your **bare** Git repositories are located.
   * **documentationFinalPath** - public folder where to put (deploy) ready html website. For example, `/var/www`
