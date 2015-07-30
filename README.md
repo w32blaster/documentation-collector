@@ -20,6 +20,7 @@ The script could be executed by CRON or Git hook.
 
 * **Docementation Collector** is designed to be executed on the same server where bare Git repositories are located
 * the script runs [JBake](http://www.jbake.org) generator, that uses Java installed
+* expected that the very first line of each README file is _"title=Some Title"_ (see the demo filder)
 * requires *GitPython*. You can install it using command:
 
      ```
