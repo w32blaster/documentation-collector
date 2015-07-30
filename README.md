@@ -48,9 +48,9 @@ The script could be executed by CRON or Git hook.
   * **clonedReposPath** - directory where script will clone all your repos. On each other invocation it will update instead cloning.
   * **bareReposPath** - path where your **bare** Git repositories are located.
   * **documentationFinalPath** - public folder where to put (deploy) ready html website. For example, `/var/www`
-  * **readmeFileName** - specify name of README files to be collected in case if you use different name or company prefixes, like *PRFX_README.md*.
+  * **readmeFileName** - specify name of README files to be collected in case if you use different name or company prefixes, like *PRFX_README.md*. Remember, you can use either Markdown or Asciidoc for your syntax!
   * **pathToJBakeExec** - full path to executable JBake. If you added it to your PATH, then specify simply *jbake*
- 5. assume that you have already committed couple of README.md files. Then you can execute the script:
+ 5. assume that you have already committed couple of README files. Then you can execute the script:
  
   ```
   python collectDocumentation.py
