@@ -10,7 +10,8 @@ There are lot of many different tools that can generate a documentation for your
 
 Each your project has its own README.md file (like in GitHub). **Docementation Collector** is simple script that scans recursively all your workspace and copies found README.md files to one place and runs JBake to build a HTML page for you.
 
-The result could be look like this:
+## Demo
+The result could be look like this -> [live demo](http://w32blaster.github.io/documentation-collector/), but abviousely you can modify the layout and styles as you wish.
 
 -----IMAGE-----
 
