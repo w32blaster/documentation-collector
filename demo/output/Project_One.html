@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Project One</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="keywords" content="">
+    <meta name="generator" content="JBake">
+
+    <!-- Le styles "" -->
+
+
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="css/asciidoctor.css" rel="stylesheet">
+    <link href="css/base.css" rel="stylesheet">
+    <link href="css/prettify.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <!--<link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">-->
+    <link rel="shortcut icon" href="favicon.ico">
+  </head>
+  <body onload="prettyPrint()">
+
+<!-- Fixed navbar -->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+  
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/">
+          <img alt="Brand" width="18" height="20" src="customLogo.png">
+        </a>
+    </div>
+
+    <p class="text-right">
+      <small>Generated: 31-Jul-2015</small>
+    </p>
+
+  </div>
+</nav>
+<div class="container-fluid">
+	<div class="row">	
+
+	      <div class="col-md-3"> <!--
+      The Table of contents
+-->
+<ul class="nav nav-pills nav-stacked">
+                              <li class='active'>
+                                    <a href="#">
+                                          Project One 
+                                    </a>
+                              </li>
+                  
+      </li>
+                              <li>
+                                    <a href="/Project_Three.html">
+                                          Project Three 
+                                    </a>
+                              </li>
+                  
+      </li>
+                              <li>
+                                    <a href="/Project_Two.html">
+                                          Project Two 
+                                    </a>
+                              </li>
+                  
+      </li>
+</ul>
+
+
+ </div>
+	      <div class="col-md-9">
+
+			<p><em>14 July 2015</em></p>
+			
+			Tags: 
+				<a href="/tags/java.html">
+					<span class="label label-info">
+						<span class="glyphicon glyphicon-tag" aria-hidden="true"></span> java  
+					</span>
+				</a>
+				&nbsp;
+				<a href="/tags/guice.html">
+					<span class="label label-info">
+						<span class="glyphicon glyphicon-tag" aria-hidden="true"></span> guice  
+					</span>
+				</a>
+				&nbsp;
+
+
+			<div class="page-header">
+				<h1>Project One</h1>
+			</div>
+
+			<table>
+				<tr>
+					<td>Author</td>
+					<td> John Doe </td>
+				</tr>	
+				<tr>
+					<td>Jira Issue</td>
+					<td>
+							<a href="http://jira.server.com/issue/PROJECT-ONE-11">
+								PROJECT-ONE-11
+							</a>
+					</td>
+				</tr>
+				<tr>
+					<td>Docker</td>
+					<td> project-one </td>
+				</tr>
+			</table>
+
+
+			<p><pre><code>  NB! the content is copied from the [Revizor](https://github.com/w32blaster/revizor/wiki/Smart-commits) wiki for demonstration purposes.
+</code></pre><h1>Revizor Smart Commits</h1><p>Revizor supports quite common technology, like "Smart Commits", also used in other tools dealing with CVS.</p><p>Smart commit - is a short commands, added to a commit message. When Revizor detects these commands, it automatically perfors some actions (like create new review).</p><h2>Commands</h2><p>The main command is create new review. It looks like:</p>
+<pre><code>+review email1 email2 #key1 #key2
+</code></pre><p>where</p>
+<table>
+  <thead>
+    <tr>
+      <th>Argument </th>
+      <th>Description </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>+revizor</code> </td>
+      <td>mandatory tocken. Asks Revizor to create a new review </td>
+    </tr>
+    <tr>
+      <td><code>email1 email2</code> </td>
+      <td>(optional) list of emails separated by blank spaces or comma. Assignees in Revizor. New review will be assigned to the given users and they will receive an email notifications. If these emails are not existing in Revizor database, then the they will be ignored. </td>
+    </tr>
+    <tr>
+      <td><code>#key1 #key2</code> </td>
+      <td>(optional) if some issue trackers are set for Revizor, then current review will be associated with the given issue(s). Please check <a href="https://github.com/w32blaster/revizor/wiki/Issue-tracker-support">Issue Tracker support</a> page for details. </td>
+    </tr>
+  </tbody>
+</table><h3>Create a review (example)</h3><p>When Revizor detects this command, it creates new review with current revision:</p>
+<pre><code>+review reviewer1@email.com reviewer2@email.com #ISSUE-KEY-01 #ISSUE-KEY-02
+</code></pre><p>The author will be the CVS committer, header and message will be extracted from the commit message. Each user in Revizor can have any number of aliaces: alternative emails that could be associated with this user.</p><p>For example, a developer with email <a href="mailto:&#95;m&#97;&#x78;&#x40;&#x63;&#x6f;&#109;&#x70;&#x61;n&#121;&#x2e;&#99;o&#109;&#95;">&#95;m&#97;&#x78;&#x40;&#x63;&#x6f;&#109;&#x70;&#x61;n&#121;&#x2e;&#99;o&#109;&#95;</a> can commit the changeset to the Git/Mercurial and leave this message (regarding <a href="http://git-scm.com/book/ch5-2.html#Commit-Guidelines">common rules for commit messages</a>):</p>
+<pre><code>&quot;Fix the broken layout
+
+Within this commit I repaired the broken layout on the
+user settings page. 
++review john@company.com, alice@company.com #KEY-1&quot;
+</code></pre><p>When Revizor pulls this commit, it automatically will create an review with these details:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Field </th>
+      <th>Value </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>header</strong> </td>
+      <td>"Fix the broken layout" </td>
+    </tr>
+    <tr>
+      <td><strong>description</strong> </td>
+      <td>"Within this commit I repaired the broken layout on the user settings page." </td>
+    </tr>
+    <tr>
+      <td><strong>author</strong> </td>
+      <td><a href="mailto:&#95;m&#97;x&#x40;&#99;&#x6f;&#x6d;&#112;&#97;n&#x79;&#x2e;c&#111;&#x6d;&#x5f;">&#95;m&#97;x&#x40;&#99;&#x6f;&#x6d;&#112;&#97;n&#x79;&#x2e;c&#111;&#x6d;&#x5f;</a> (**if this user does not exist in the Revizor system or no one user has this alias, then the upcoming review will be ignored!**) </td>
+    </tr>
+    <tr>
+      <td><strong>reviewers</strong> </td>
+      <td><a href="mailto:&#95;&#106;&#111;&#104;&#110;&#x40;&#x63;&#111;&#109;&#112;&#97;&#x6e;&#121;&#46;&#99;&#x6f;&#109;&#95;">&#95;&#106;&#111;&#104;&#110;&#x40;&#x63;&#111;&#109;&#112;&#97;&#x6e;&#121;&#46;&#99;&#x6f;&#109;&#95;</a> and <a href="mailto:&#x5f;&#97;&#x6c;&#x69;&#x63;&#x65;&#64;&#x63;&#111;&#109;p&#97;&#x6e;&#x79;.&#x63;&#111;&#109;&#95;">&#x5f;&#97;&#x6c;&#x69;&#x63;&#x65;&#64;&#x63;&#111;&#109;p&#97;&#x6e;&#x79;.&#x63;&#111;&#109;&#95;</a>. If these users do not exist in the Revizor, then a review will be created without reviewers </td>
+    </tr>
+    <tr>
+      <td><strong>issue ticket</strong> </td>
+      <td>let's assume, there is at least one issue tracker in Revizor, having the pattern <code>KEY-\d+</code>. Then the current review will be associated with the issue having ID <em>KEY-1</em>. </td>
+    </tr>
+  </tbody>
+</table><h3>Associate a review with an issue</h3><p>Please, check the page <a href="https://github.com/w32blaster/revizor/wiki/Issue-tracker-support">Issue Tracker support</a> for details.</p></p>
+
+		</div>
+	</div>	
+</div>
+
+		
+        
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery-1.11.1.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/prettify.js"></script>
+    
+  </body>
+</html>

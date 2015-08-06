@@ -13,7 +13,9 @@ Each your project has its own README.md file (like in GitHub). **Docementation C
 ## Demo
 The result could be look like this -> [live demo](http://w32blaster.github.io/documentation-collector/), but abviousely you can modify the layout and styles as you wish.
 
------IMAGE-----
+![Documentation generated using JBake and documentation collector script](http://w32blaster.github.io/documentation-collector/smart-commits.png)
+
+Please, find the source code of this demo page [here](https://github.com/w32blaster/documentation-collector/tree/master/demo)
 
 The script could be executed by CRON or Git hook.
 
