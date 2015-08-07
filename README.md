@@ -1,14 +1,14 @@
 # Documentation Collector
 
-**Docementation Collector** is a simple script that collects README files from multiple Git projects and builds single HTML based documentation using [JBake](http://www.jbake.org) generator.
+**Documentation Collector** is a simple script that collects README files from multiple Git projects and builds single HTML based documentation using [JBake](http://www.jbake.org) generator.
 
 ## Why?
 
-There are lot of many different tools that can generate a documentation for your code. But all of them have one small disadvantage: they work only for one single project. Let's image that your company has dozens of small projects (for example, microservices). To organize working process you have to create internal Wiki page and fill manulally all the valuable information about your code base. But this is exhausting work. The **Docementation Collector** script was written to automate this process.
+There are lot of many different tools that can generate a documentation for your code. But all of them have one small disadvantage: they work only for one single project. Let's image that your company has dozens of small projects (for example, microservices). To organize working process you have to create internal Wiki page and fill manulally all the valuable information about your code base. But this is exhausting work. The **Documentation Collector** script was written to automate this process.
 
 ## How does it work?
 
-Each your project has its own README.md file (like in GitHub). **Docementation Collector** is simple script that scans recursively all your workspace and collects found README.md files and runs JBake to build a HTML page for you.
+Each your project has its own README.md file (like in GitHub). **Documentation Collector** is simple script that scans recursively all your workspace and collects found README.md files and runs JBake to build a HTML page for you.
 
 ## Demo
 The result could be look like this
@@ -25,7 +25,7 @@ The script could be executed by CRON or Git hook.
 
 ## Limitation and requirements
 
-* **Docementation Collector** is designed to be executed on the same server where bare Git repositories are located
+* **Documentation Collector** is designed to be executed on the same server where bare Git repositories are located
 * the script runs [JBake](http://www.jbake.org) generator, that uses Java installed
 * expected that the very first line of each README file is _"title=Some Title"_ (see the _demo/content_ filder, [for example](https://raw.githubusercontent.com/w32blaster/documentation-collector/master/demo/content/Project_Three.md))
 * requires *GitPython*. You can install it using command:
